@@ -19,7 +19,16 @@
         "command": "content-provider-sample.helloWorld",
         "title": "Hello World"
       }
-    ]
+    ],
+    "menus": {
+      "explorer/context": [
+        {
+          "when": "resourceFilename =~ /.(jpg|png|jpeg)/",
+          "command": "content-provider-sample.helloWorld",
+          "group": "navigation"
+        }
+      ]
+    }
   },
   "scripts": {
     "vscode:prepublish": "yarn run compile",
