@@ -2,23 +2,17 @@
 // Import the module and reference it with the alias vscode in your code below
 import * as vscode from "vscode";
 
-// This method is called when your extension is activated
-// Your extension is activated the very first time the command is executed
+// これから実装するので、この時点ではまだファイルが無い事に注意！
+import { WebViewProvider } from "./webview-provider";
+
 export function activate(context: vscode.ExtensionContext) {
-  // Use the console to output diagnostic information (console.log) and errors (console.error)
-  // This line of code will only be executed once when your extension is activated
-  console.log('Congratulations, your extension "content-provider-sample" is now active!');
-
-  // The command has been defined in the package.json file
-  // Now provide the implementation of the command with registerCommand
-  // The commandId parameter must match the command field in package.json
-  let disposable = vscode.commands.registerCommand("content-provider-sample.helloWorld", () => {
-    // The code you place here will be executed every time your command is executed
-    // Display a message box to the user
-    vscode.window.showInformationMessage("Hello World from content-provider-sample!");
-  });
-
-  context.subscriptions.push(disposable);
+  // WebView を登録
+  context.subscriptions.push(
+    vscode.window.registerWebviewViewProvider(
+      "example.webview", // package.json で設定した`id`と同じ値にして下さい
+      new WebViewProvider(context.extensionUri)
+    )
+  );
 }
 
 // This method is called when your extension is deactivated
