@@ -12,6 +12,14 @@ export function activate(context: vscode.ExtensionContext) {
         enableScripts: true
       });
 
+      panel.webview.onDidReceiveMessage((message) => {
+        switch (message.type) {
+          case "crop":
+            vscode.window.showInformationMessage(JSON.stringify(message, null, 2));
+            return;
+        }
+      });
+
       // And get the special URI to use with the webview
       const imgSrc = panel.webview.asWebviewUri(vscode.Uri.file(args.path));
       const { width, height } = sizeOf(imgSrc.fsPath);
@@ -49,11 +57,15 @@ export function activate(context: vscode.ExtensionContext) {
             });
             
             const execButton = document.getElementById('crop-exec-button');
+            const vscode = acquireVsCodeApi();
             
             execButton.addEventListener('click', () => {
               const canvas = cropper.getCroppedCanvas();
               const preview = document.getElementById('preview');
               preview.src = canvas.toDataURL();
+              
+              // 拡張側にイベントを送信します
+              vscode.postMessage({ type: "crop", data: cropper.getData() })
             })
           </script>
         </body>
