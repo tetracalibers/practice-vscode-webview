@@ -44,7 +44,7 @@ export function activate(context: vscode.ExtensionContext) {
           <div style="width: ${width}px; height: ${height}px">
             <img id="crop-target" width="${width}" height="${height}"src="${imgSrc}"/>
           </div>
-          <button id='crop-exec-button'>Crop</button>
+          <button id='crop-button'>Crop</button>
           <div>
             <img id='preview' />
           </div>
@@ -56,10 +56,10 @@ export function activate(context: vscode.ExtensionContext) {
               zoomable: false,
             });
             
-            const execButton = document.getElementById('crop-exec-button');
+            const cropButton = document.getElementById('crop-button');
             const vscode = acquireVsCodeApi();
             
-            execButton.addEventListener('click', () => {
+            cropButton.addEventListener('click', () => {
               const canvas = cropper.getCroppedCanvas();
               const preview = document.getElementById('preview');
               preview.src = canvas.toDataURL();
