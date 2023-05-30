@@ -1,6 +1,7 @@
 // The module 'vscode' contains the VS Code extensibility API
 // Import the module and reference it with the alias vscode in your code below
 import * as vscode from "vscode";
+import sizeOf from "image-size";
 
 export function activate(context: vscode.ExtensionContext) {
   // WebView を登録
@@ -11,6 +12,7 @@ export function activate(context: vscode.ExtensionContext) {
 
       // And get the special URI to use with the webview
       const imgSrc = panel.webview.asWebviewUri(vscode.Uri.file(args.path));
+      const { width, height } = sizeOf(imgSrc.fsPath);
 
       panel.webview.html = `
         <!DOCTYPE html>
@@ -21,7 +23,9 @@ export function activate(context: vscode.ExtensionContext) {
           <title>WebView Example</title>
         </head>
         <body>
-          <img src="${imgSrc}"/>
+          <div style="width: ${width}px; height: ${height}px">
+            <img id="crop-target" width="${width}" height="${height}"src="${imgSrc}"/>
+          </div>
         </body>
         </html>
       `;
