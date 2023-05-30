@@ -5,9 +5,13 @@ import * as vscode from "vscode";
 export function activate(context: vscode.ExtensionContext) {
   // WebView を登録
   context.subscriptions.push(
-    vscode.commands.registerCommand("content-provider-sample.helloWorld", () => {
+    vscode.commands.registerCommand("content-provider-sample.helloWorld", (args) => {
       // Create and show panel
       const panel = vscode.window.createWebviewPanel("example.webview", "Hello World", vscode.ViewColumn.One, {});
+
+      // And get the special URI to use with the webview
+      const imgSrc = panel.webview.asWebviewUri(vscode.Uri.file(args.path));
+
       panel.webview.html = `
         <!DOCTYPE html>
         <html lang="ja">
@@ -17,7 +21,7 @@ export function activate(context: vscode.ExtensionContext) {
           <title>WebView Example</title>
         </head>
         <body>
-          <h1>Hello World!</h1>
+          <img src="${imgSrc}"/>
         </body>
         </html>
       `;
